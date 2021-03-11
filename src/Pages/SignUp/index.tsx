@@ -1,5 +1,6 @@
 import React from 'react';
-import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
+import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
+import { Form } from '@unform/web';
 
 import Input from '../../components/Input/index';
 import Button from '../../components/Button/index';
@@ -7,14 +8,21 @@ import Button from '../../components/Button/index';
 import logoImg from '../../assets/svg/logo.svg';
 import { Container, Content, Background } from './styles';
 
-const SignIn: React.FC = () => {
+const SignUp: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  function handleSubmit(data: object): void {
+    console.log(data);
+  }
+
   return (
     <Container>
+      <Background />
       <Content>
         <img src={logoImg} alt="GoBarber" />
 
-        <form>
-          <h1>Faça o seu logon</h1>
+        <Form onSubmit={handleSubmit}>
+          <h1>Faça o seu cadastro</h1>
+          <Input name="name" icon={FiUser} placeholder="Nome completo" />
           <Input name="email" icon={FiMail} placeholder="E-mail" />
           <Input
             name="password"
@@ -22,17 +30,15 @@ const SignIn: React.FC = () => {
             type="password"
             placeholder="Senha"
           />
-          <Button type="submit">Entrar</Button>
-          <a href="forgot">Esqueci minha senha</a>
-        </form>
+          <Button type="submit">Cadastrar</Button>
+        </Form>
         <a href="account">
-          <FiLogIn />
-          Criar conta
+          <FiArrowLeft />
+          Voltar para logon
         </a>
       </Content>
-      <Background />
     </Container>
   );
 };
 
-export default SignIn;
+export default SignUp;
