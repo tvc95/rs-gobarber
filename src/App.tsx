@@ -3,10 +3,14 @@ import GlobalStyle from './styles/global';
 import SignIn from './Pages/Landing';
 // import SignUp from './Pages/SignUp';
 
+import AuthContext from './contexts/AuthContext';
+
 function App(): JSX.Element {
   return (
     <>
-      <SignIn />
+      <AuthContext.Provider value={{ name: 'Thiago' }}>
+        <SignIn />
+      </AuthContext.Provider>
       <GlobalStyle />
     </>
   );
