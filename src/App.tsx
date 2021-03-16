@@ -1,18 +1,21 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+
 import GlobalStyle from './styles/global';
-import SignIn from './Pages/Landing';
-// import SignUp from './Pages/SignUp';
+import Routes from './routes';
 
 import AppProvider from './hooks/index';
 
 function App(): JSX.Element {
   return (
     <>
-      <AppProvider>
-        <SignIn />
-      </AppProvider>
+      <Router>
+        <AppProvider>
+          <Routes />
+        </AppProvider>
 
-      <GlobalStyle />
+        <GlobalStyle />
+      </Router>
     </>
   );
 }
