@@ -1,6 +1,6 @@
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { FiArrowLeft, FiMail, FiUser } from 'react-icons/fi';
 import { Link, useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -11,12 +11,14 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import { Background, Container, Content } from './styles';
 
 import logoImg from '../../assets/svg/logo.svg';
+import api from '../../services/Api';
 
 interface ForgotPasswordFormData {
   email: string;
 }
 
 const ForgotPassword: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const formRef = useRef<FormHandles>(null);
 
   const { addToast } = useToast();
@@ -26,6 +28,7 @@ const ForgotPassword: React.FC = () => {
   const handleSubmit = useCallback(
     async (data: ForgotPasswordFormData) => {
       try {
+        setLoading(true);
         formRef.current?.setErrors({});
 
         const schema = Yup.object().shape({
@@ -39,6 +42,16 @@ const ForgotPassword: React.FC = () => {
         });
 
         // Password recovery
+        await api.post('/password/forgot', {
+          email: data.email,
+        });
+
+        addToast({
+          type: 'success',
+          title: 'E-mail de recuperação enviado',
+          description:
+            'Enviamos um e-mail para confirmar a recuperação de senha. Verifique em sua caixa de entrada.',
+        });
         // history.push('/dashboard');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -53,6 +66,8 @@ const ForgotPassword: React.FC = () => {
           description:
             'Ocorreu um erro ao tentar recuperar a senha. Tente novamente!',
         });
+      } finally {
+        setLoading(false);
       }
     },
     [addToast],
@@ -68,7 +83,9 @@ const ForgotPassword: React.FC = () => {
           <h1>Recuperar senha</h1>
           <Input name="name" icon={FiUser} placeholder="Nome completo" />
           <Input name="email" icon={FiMail} placeholder="E-mail" />
-          <Button type="submit">Recuperar senha</Button>
+          <Button loading={loading} type="submit">
+            Recuperar senha
+          </Button>
         </Form>
         <Link to="/signin">
           <FiArrowLeft />
